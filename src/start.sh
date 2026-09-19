@@ -13,9 +13,15 @@ else
     echo "worker-comfyui: No network volume detected, using local model storage"
 fi
 
-# Download missing models via hf download (hf_xet chunk-based parallel transfers).
-echo "worker-comfyui: Validating models..."
-/usr/local/bin/check-models.sh
+# Models are seeded once on the Network Volume. Cold workers never download weights.
+if [ ! -d /runpod-volume ]; then
+    echo "worker-comfyui: /runpod-volume is required in production" >&2
+    exit 1
+fi
+echo "worker-comfyui: Validating immutable model manifest..."
+MODEL_READY_MARKER=$(python /opt/catline/verify_models.py \
+    --manifest /opt/catline/models.json --base /runpod-volume/models)
+export MODEL_READY_MARKER
 
 # Use libtcmalloc for better memory management
 TCMALLOC="$(ldconfig -p | grep -Po "libtcmalloc.so.\d" | head -n 1)"

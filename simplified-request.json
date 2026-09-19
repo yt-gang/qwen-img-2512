@@ -2,6 +2,14 @@
   "input": {
     "prompt": "A cat sitting on a windowsill, warm afternoon sunlight, photorealistic",
     "seed": 42,
-    "steps": 4
+    "steps": 4,
+    "width": 1080,
+    "height": 1920,
+    "output": {
+      "upload_url": "https://presigned-r2-put-url.example/object",
+      "object_key": "projects/project-id/scenes/scene-id/images/v1.webp",
+      "content_type": "image/webp",
+      "required_headers": {"Content-Type": "image/webp"}
+    }
   }
 }

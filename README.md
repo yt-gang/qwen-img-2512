@@ -2,6 +2,17 @@
 
 # Qwen Image 2512 Generation
 
+## Catline production contract
+
+This fork's production path requires a pre-seeded RunPod Network Volume. Container startup validates
+the pinned `models.json` manifest and its full-verification marker; it never downloads weights during
+a cold start. Run `python /opt/catline/seed_models.py` from a temporary Pod to seed and SHA-256 verify
+the volume.
+
+Catline jobs generate exactly one `1080x1920` lossless WebP and upload it directly to the supplied
+one-object R2 presigned PUT URL. The worker returns only `asset` metadata and timings—never base64,
+signed URLs or permanent storage credentials. `output` is required for production jobs.
+
 🚀 **Ultra-fast AI image generation in 4 or 8 steps** - Generate high-quality 1328×1328 images using the latest Qwen-Image-2512 model with Lightning LoRA optimization.
 
 ## 🎯 **Maximum Resolution: 4K Ultra HD**

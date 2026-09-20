@@ -107,6 +107,8 @@ CMD ["/start.sh"]
 FROM base AS baked-models
 ARG BAKED_MODEL_BASE=/comfyui/models
 RUN python /opt/catline/seed_models.py --base "${BAKED_MODEL_BASE}"
+ENV CATLINE_BAKED_MODELS=true
+ENV COMFY_MODEL_BASE=/comfyui/models
 
-# Default image: models live on a pre-seeded Network Volume.
-FROM base AS final
+# Benchmark branch default: immutable models are baked into the image.
+FROM baked-models AS final

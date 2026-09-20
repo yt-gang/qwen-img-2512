@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -19,12 +20,14 @@ def main() -> int:
         if target.is_file() and target.stat().st_size == item["size"]:
             continue
         target.parent.mkdir(parents=True, exist_ok=True)
+        download_dir = target.parent / ".download"
         subprocess.run([
             "hf", "download", item["repo"], item["source"], "--revision", item["revision"],
-            "--local-dir", str(target.parent / ".download"),
+            "--local-dir", str(download_dir),
         ], check=True)
-        downloaded = target.parent / ".download" / item["source"]
+        downloaded = download_dir / item["source"]
         downloaded.replace(target)
+        shutil.rmtree(download_dir)
     subprocess.run([
         "python", "/opt/catline/verify_models.py", "--manifest", str(args.manifest),
         "--base", str(args.base), "--full",

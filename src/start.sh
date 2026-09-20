@@ -27,6 +27,11 @@ if [ "${CATLINE_BUILD_TEST:-false}" = "true" ]; then
     echo "worker-comfyui: RunPod build-test mode; skipping model-volume validation"
     MODEL_READY_MARKER=/tmp/catline-build-test.verified
     printf 'build-test\n' > "${MODEL_READY_MARKER}"
+elif [ "${CATLINE_BAKED_MODELS:-false}" = "true" ]; then
+    echo "worker-comfyui: Validating models baked into the container image..."
+    export COMFY_MODEL_BASE=/comfyui/models
+    MODEL_READY_MARKER=$(python /opt/catline/verify_models.py \
+        --manifest /opt/catline/models.json --base /comfyui/models)
 elif [ ! -d /runpod-volume ]; then
     echo "worker-comfyui: /runpod-volume is required in production" >&2
     exit 1

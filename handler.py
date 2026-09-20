@@ -710,16 +710,18 @@ def validate_model_exists(model_filename, model_type=None):
     Returns:
         bool: True if model exists, False otherwise
     """
+    model_base = os.environ.get("COMFY_MODEL_BASE", "/runpod-volume/models")
+
     # Try to find the model in known paths
     if model_type:
-        model_path = f"/comfyui/models/{model_type}/{model_filename}"
+        model_path = os.path.join(model_base, model_type, model_filename)
         if os.path.exists(model_path):
             return True
 
     # Check all possible model directories
     model_dirs = ["diffusion_models", "clip", "vae", "loras", "checkpoints", "unet"]
     for model_dir in model_dirs:
-        model_path = f"/comfyui/models/{model_dir}/{model_filename}"
+        model_path = os.path.join(model_base, model_dir, model_filename)
         if os.path.exists(model_path):
             return True
 

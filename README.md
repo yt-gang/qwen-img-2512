@@ -9,6 +9,9 @@ the pinned `models.json` manifest and its full-verification marker; it never dow
 a cold start. Run `python /opt/catline/seed_models.py` from a temporary Pod to seed and SHA-256 verify
 the volume.
 
+For faster cold starts, the same exact model set can be served from RunPod's
+host-local Hugging Face Model Cache. See [`docs/CACHED_MODEL.md`](docs/CACHED_MODEL.md).
+
 Catline jobs generate exactly one `1080x1920` lossless WebP and upload it directly to the supplied
 one-object R2 presigned PUT URL. The worker returns only `asset` metadata and timings—never base64,
 signed URLs or permanent storage credentials. `output` is required for production jobs.
